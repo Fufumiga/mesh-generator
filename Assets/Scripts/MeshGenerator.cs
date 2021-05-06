@@ -12,11 +12,22 @@ public class MeshGenerator : MonoBehaviour
     public int xSize = 20;
     public int zSize = 20;
 
+    public float offsetX;
+    public float offsetY;
+
     void Start()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
+        offsetX = Random.Range(0, 999f);
+        offsetY = Random.Range(0, 999f);
+
+        
+    }
+
+    void Update() // debug/experimenting reasons only for gods sake
+    {
         CreateShape();
         UpdateMesh();
     }
@@ -29,7 +40,7 @@ public class MeshGenerator : MonoBehaviour
         {
             for (int x = 0; x <= xSize; x++)
             {
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * 4;
+                float y = Mathf.PerlinNoise(x * .3f + offsetX, z * .3f + offsetY) * 4;
                 vertices[vertIndex] = new Vector3(x, y, z);
                 vertIndex++;
             }
@@ -65,6 +76,7 @@ public class MeshGenerator : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
 
+        mesh.Optimize();
         mesh.RecalculateNormals();
     }
 
